@@ -14,7 +14,7 @@ export class AppService {
     private httpClient: HttpClient
   ) { }
 
-  getFilterArtists(queryParams): Observable<any> {
+  getFilteredArtists(queryParams): Observable<any> {
     let httpParams = new HttpParams();
     if (queryParams) {
       for (let params in queryParams) {

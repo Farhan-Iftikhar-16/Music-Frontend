@@ -17,6 +17,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {InputNumberModule} from "primeng/inputnumber";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {MessageService} from "primeng/api";
     HttpClientModule,
     ProgressSpinnerModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
+    NgxSliderModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
