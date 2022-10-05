@@ -129,26 +129,6 @@ background: white !important;
   background: #202020 !important;
 }
 
-.p-slider {
-  background: #202020 !important;
-
-  .p-slider-handle {
-    border: none !important;
-    top: -1px !important;
-    height: 25px !important;
-    width: 18px !important;
-    border-radius: 4px !important;
-  }
-
-  .p-slider-handle:hover {
-    background: white !important;
-  }
-
-  .p-slider-range {
-    background: white !important;
-  }
-}
-
 .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
   outline: 0 none;
   outline-offset: 0;
@@ -181,6 +161,10 @@ background: white !important;
   display: flex !important;
   justify-content: center;
   min-height: 100vh;
+}
+
+.p-dropdown-panel {
+  left: -68px !important;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 3px;}

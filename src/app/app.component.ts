@@ -1,77 +1,74 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {AppService} from "./app.service";
 import {Subject, takeUntil} from "rxjs";
 import {ToastService} from "./toast.service";
+import {Options} from "@angular-slider/ngx-slider";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit{
-  val = 0;
-  val1 = 0;
-  val2 = 0;
-  val3 = 0;
 
   valueRanges;
   title = 'Music-Playlist-Frontend';
   showLoader = false;
+  queryParamsPageNumber = 1;
+  filteredArtists = [];
   recentFilters = [
     {label: 'Rap de', isEdit: false},
     {label: 'US big in EU', isEdit: false},
     {label: 'New Dance UK', isEdit: false}
-  ]
-
-  filterArtists = [];
+  ];
   filters = {
     spotify: {
       spotify_monthly_listeners: {
-        interval: {
-          min: 0,
-          max: 0
-        },
         value: {
-          min: 0,
-          max: 0
+          min: null,
+          max: null
         },
-        selectedInterval : [0, 0] as number[],
+        options: {
+          floor: null,
+          ceil: null,
+          step: 32
+        },
         enabled: true
       },
       spotify_follower: {
-        interval: {
-          min: 0,
-          max: 0
-        },
         value: {
-          min: 0,
-          max: 0
+          min: null,
+          max: 0,
+          power: 0
         },
-        selectedInterval : [0, 0] as number[],
+        options: {
+          floor: null,
+          ceil: null,
+          step: 1,
+        },
         enabled: true
       },
       top_track_streams: {
-        interval: {
-          min: 0,
-          max: 0
-        },
         value: {
-          min: 0,
-          max: 0
+          min: null,
+          max: null
         },
-        selectedInterval : [0, 0] as number[],
+        options: {
+          floor: null,
+          ceil: null
+        },
         enabled: true
       },
       recent_track_streams: {
-        interval: {
-          min: 0,
-          max: 0
-        },
         value: {
-          min: 0,
-          max: 0
+          min: null,
+          max: null
         },
-        selectedInterval : [0, 0] as number[],
+        options: {
+          floor: null,
+          ceil: null
+        },
         enabled: true
       },
       filterTypeEnabled: true
@@ -90,6 +87,23 @@ export class AppComponent implements OnInit{
     }
   }
   filterTypes = ['spotify_monthly_listeners', 'spotify_follower', 'top_track_streams', 'recent_track_streams'];
+  sortByOptions = [
+    {label: 'Spotify Monthly Listeners', value: 'SPOTIFY_MONTHLY_LISTENERS'},
+    {label: 'Spotify Followers', value: 'SPOTIFY_FOLLOWERS'},
+    {label: 'Recent Track Streams', value: 'RECENT_TRACK_STREAMS'},
+    {label: 'Top Track Streams', value: 'TOP_TRACK_STREAMS'}
+  ];
+  playerOptions: Options = {
+    floor: 0,
+    ceil: 100
+  };
+
+  @HostListener("window:scroll", []) onScroll(): void {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      this.queryParamsPageNumber += 1;
+      this.setQueryParams();
+    }
+  }
 
   private componentInView = new Subject();
 
@@ -100,15 +114,15 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getFilterArtists();
+    this.getFilteredArtists();
     this.getValueRanges();
   }
 
-  getFilterArtists(queryParams = null): void {
+  getFilteredArtists(queryParams = null): void {
     this.showLoader = true;
-    this.appService.getFilterArtists(queryParams).pipe(takeUntil(this.componentInView)).subscribe(response => {
+    this.appService.getFilteredArtists(queryParams).pipe(takeUntil(this.componentInView)).subscribe(response => {
       this.showLoader = false;
-      this.filterArtists = response;
+      this.filteredArtists = [...this.filteredArtists, ...response];
     }, error => {
       this.showLoader = false;
       this.toastService.error(error.error.message);
@@ -121,11 +135,9 @@ export class AppComponent implements OnInit{
     this.appService.getValueRanges().pipe(takeUntil(this.componentInView)).subscribe(response => {
       this.showLoader = false;
       this.valueRanges = response;
-      for (let interval in response.intervals) {
-        this.filterTypes.forEach(type => {
-          this.setFilterInterval('spotify', type);
-        });
-      }
+      this.filterTypes.forEach(type => {
+        this.setFilterInterval('spotify', type);
+      });
     }, error => {
       this.showLoader = false;
       this.toastService.error(error.error.message);
@@ -135,11 +147,10 @@ export class AppComponent implements OnInit{
   setFilterInterval(key, filter): void {
     if (this.filters && this.filters[key]) {
       if (this.filters[key][filter]) {
-        this.filters[key][filter].interval.min = this.valueRanges.intervals[filter][0];
-        this.filters[key][filter].interval.max = this.valueRanges.intervals[filter][1];
-        this.filters[key][filter].selectedInterval = [+this.valueRanges.intervals[filter][0], +this.valueRanges.intervals[filter][1]];
-        this.filters[key][filter].value.min = this.valueRanges.intervals[filter][0];
-        this.filters[key][filter].value.max = this.valueRanges.intervals[filter][1];
+        this.filters[key][filter].options.floor = 0;
+        this.filters[key][filter].options.ceil = +this.valueRanges.intervals[filter][1];
+        this.filters[key][filter].value.min = +this.valueRanges.intervals[filter][0];
+        this.filters[key][filter].value.max = +this.valueRanges.intervals[filter][1];
       }
     }
   }
@@ -156,9 +167,11 @@ export class AppComponent implements OnInit{
           }
         });
       }
+
+      queryParams['page'] = this.queryParamsPageNumber;
     }
 
-    this.getFilterArtists(queryParams);
+    this.getFilteredArtists(queryParams);
   }
 
   getFormat(number){
@@ -181,5 +194,52 @@ export class AppComponent implements OnInit{
     if(number >= 1000000000 && number <= 999999999999){
       return (number / 1000000000) + 'B';
     }
+  }
+
+  onSortByChanged(event): void {
+    const value = event.value;
+
+    if (value === 'SPOTIFY_MONTHLY_LISTENERS') {
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_monthly_listeners > +value2.spotify_monthly_listeners ? 1 : -1 );
+    }
+
+    if (value === 'SPOTIFY_FOLLOWERS') {
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_follower > +value2.spotify_follower ? 1 : -1 );
+    }
+
+    if (value === 'RECENT_TRACK_STREAMS') {
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.recent_track_streams > +value2.recent_track_streams ? 1 : -1 );
+    }
+
+    if (value === 'TOP_TRACK_STREAMS') {
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.top_track_streams > +value2.top_track_streams ? 1 : -1 );
+    }
+  }
+
+  countEnabledFilters(filter): number {
+    let count = 0;
+    if (filter === 'spotify') {
+      this.filterTypes.forEach(type => {
+        if (this.filters[filter][type].enabled) {
+          count++;
+        }
+      });
+    }
+
+    return count;
+  }
+
+  onSliderValueChanged(event): void {
+    this.filters.spotify.spotify_follower.value.power++;
+    if (this.filters.spotify.spotify_follower.value.min === this.filters.spotify.spotify_follower.options.ceil) {
+      this.filters.spotify.spotify_follower.value.min = this.filters.spotify.spotify_follower.value.min / 2;
+    } else  {
+      this.filters.spotify.spotify_follower.value.min = Math.pow(2, this.filters.spotify.spotify_follower.value.power);
+    }
+
+    this.filters.spotify.spotify_follower = {...this.filters.spotify.spotify_follower};
+    this.filters = {...this.filters};
+
+    console.log( this.filters.spotify.spotify_follower);
   }
 }

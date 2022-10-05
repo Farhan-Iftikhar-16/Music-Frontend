@@ -30,11 +30,6 @@
   opacity: 0.5;
 }
 
-.interval-text {
-  font-size: 10px;
-  margin-top: 5px;
-}
-
 .pt-50 {
   padding-top: 50px;
 }
@@ -77,19 +72,63 @@ p-knob + span {
 }
 
 :host::ng-deep {
-  .p-dropdown {
-    width: 150px !important;
+  .p-dropdown-label {
+    color: black !important;
+  }
+
+  .ngx-slider {
+    margin: 45px 0 15px !important;
+
+    .ngx-slider-pointer {
+      cursor: pointer;
+      width: 15px;
+      height: 22px;
+      top: -10px;
+      background-color: #FFFFFF;
+      z-index: 3;
+      border-radius: 3px;
+    }
+
+    .ngx-slider-pointer:after {
+      display: none !important;
+    }
+
+    .ngx-slider-selection {
+      background: #FFFFFF !important;
+    }
+
+    .ngx-slider-bubble {
+      top: 12px !important;
+      font-size: 10px !important;
+      color: #FFFFFF !important;
+    }
+  }
+
+  .player-slider.ngx-slider {
+    .ngx-slider-pointer {
+      cursor: pointer;
+      width: 12px !important;
+      height: 12px !important;
+      top: -4px;
+      background-color: #FFFFFF;
+      z-index: 3;
+      border-radius: 12px;
+    }
+
+    .ngx-slider-pointer:after {
+      display: none !important;
+    }
+
+    .ngx-slider-selection {
+      background: #FFFFFF !important;
+    }
+
+    .ngx-slider-bubble {
+      display: none !important;
+    }
   }
 
   .track-details {
-    .p-slider .p-slider-handle {
-      border: none !important;
-      top: 6.5px !important;
-      height: 9px !important;
-      width: 9px !important;
-      border-radius: 4px !important;
-    }
-
     .button-container {
       .p-button-icon-only {
         background: none !important;
