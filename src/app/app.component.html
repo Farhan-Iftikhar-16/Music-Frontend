@@ -47,7 +47,7 @@
               <i class="bi-spotify"></i>
               <span class="filter-name">Spotify</span>
               <span class="count">{{countEnabledFilters('spotify')}}</span>
-              <p-inputSwitch (onChange)="setQueryParams()" [(ngModel)]="filters.spotify.filterTypeEnabled"></p-inputSwitch>
+              <p-inputSwitch (onChange)="setQueryParams(false)" [(ngModel)]="filters.spotify.filterTypeEnabled"></p-inputSwitch>
             </div>
 
             <div class="caret-up-container" style="display: none">
@@ -70,13 +70,13 @@
                   <div class="col-lg-2 col-md-3 col-sm-12" [class.disabled]="!filters.spotify.spotify_monthly_listeners.enabled">
                     <h6>Monthly Listeners</h6>
                     <div>
-                      <p-inputNumber (onInput)="filters.spotify.spotify_monthly_listeners.value.min = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.spotify_monthly_listeners.value.min = $event.value; setQueryParams(false)"
                         name="spotify-monthly-listeners-min-value" [min]="filters.spotify.spotify_monthly_listeners.options.floor"
                         [max]="filters.spotify.spotify_monthly_listeners.options.ceil"
                         [ngModel]="filters.spotify.spotify_monthly_listeners.value.min"
                         class="w-40 w-35 filter-input text-light"></p-inputNumber>
                       <span class="mx-2">to</span>
-                      <p-inputNumber (onInput)="filters.spotify.spotify_monthly_listeners.value.max = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.spotify_monthly_listeners.value.max = $event.value; setQueryParams(false)"
                         name="spotify-monthly-listeners-max-value" [min]="filters.spotify.spotify_monthly_listeners.options.floor"
                         [max]="filters.spotify.spotify_monthly_listeners.options.ceil"
                         [ngModel]="filters.spotify.spotify_monthly_listeners.value.max"
@@ -84,13 +84,13 @@
                     </div>
                   </div>
                   <div class="col-lg-9 col-md-8 col-sm-11 d-flex flex-column justify-content-center" [class.disabled]="!filters.spotify.spotify_monthly_listeners.enabled">
-                    <ngx-slider *ngIf="filters.spotify.spotify_monthly_listeners.value.min !== null" (userChangeEnd)="setQueryParams()"
+                    <ngx-slider *ngIf="filters.spotify.spotify_monthly_listeners.value.min !== null" (userChangeEnd)="setQueryParams(false)"
                                 [(value)]="filters.spotify.spotify_monthly_listeners.value.min"
                                 [(highValue)]="filters.spotify.spotify_monthly_listeners.value.max"
                                 [options]="filters.spotify.spotify_monthly_listeners.options"></ngx-slider>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-end mb-2">
-                    <p-inputSwitch (onChange)="setQueryParams()" [(ngModel)]="filters.spotify.spotify_monthly_listeners.enabled"></p-inputSwitch>
+                    <p-inputSwitch (onChange)="setQueryParams(false)" [(ngModel)]="filters.spotify.spotify_monthly_listeners.enabled"></p-inputSwitch>
                   </div>
                 </div>
               </div>
@@ -102,13 +102,13 @@
                   <div class="col-lg-2 col-md-3 col-sm-12" [class.disabled]="!filters.spotify.top_track_streams.enabled">
                     <h6>Top track streams</h6>
                     <div>
-                      <p-inputNumber (onInput)="filters.spotify.top_track_streams.value.min = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.top_track_streams.value.min = $event.value; setQueryParams(false)"
                         name="spotify-top_track_streams-min-value"
                         [min]="filters.spotify.top_track_streams.options.floor"
                         [max]="filters.spotify.top_track_streams.options.ceil"
                         [ngModel]="filters.spotify.top_track_streams.value.min" class="w-40 w-35 filter-input text-light"></p-inputNumber>
                       <span class="mx-2">to</span>
-                      <p-inputNumber (onInput)="filters.spotify.top_track_streams.value.max = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.top_track_streams.value.max = $event.value; setQueryParams(false)"
                         name="spotify-top_track_streams-max-value"
                         [min]="filters.spotify.top_track_streams.options.floor"
                         [max]="filters.spotify.top_track_streams.options.ceil"
@@ -116,13 +116,13 @@
                     </div>
                   </div>
                   <div class="col-lg-9 col-md-8 col-sm-11 d-flex flex-column justify-content-center" [class.disabled]="!filters.spotify.top_track_streams.enabled">
-                    <ngx-slider *ngIf="filters.spotify.top_track_streams.value.min !== null" (userChangeEnd)="setQueryParams()"
+                    <ngx-slider *ngIf="filters.spotify.top_track_streams.value.min !== null" (userChangeEnd)="setQueryParams(false)"
                                 [(value)]="filters.spotify.top_track_streams.value.min"
                                 [(highValue)]="filters.spotify.top_track_streams.value.max"
                                 [options]="filters.spotify.top_track_streams.options"></ngx-slider>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-end mb-2">
-                    <p-inputSwitch (onChange)="setQueryParams()" [(ngModel)]="filters.spotify.top_track_streams.enabled" ></p-inputSwitch>
+                    <p-inputSwitch (onChange)="setQueryParams(false)" [(ngModel)]="filters.spotify.top_track_streams.enabled" ></p-inputSwitch>
                   </div>
                 </div>
               </div>
@@ -134,26 +134,25 @@
                   <div class="col-lg-2 col-md-3 col-sm-12" [class.disabled]="!filters.spotify.spotify_follower.enabled">
                     <h6>Follower</h6>
                     <div>
-                      <p-inputNumber (onInput)="filters.spotify.spotify_follower.value.min = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.spotify_follower.value.min = $event.value; setQueryParams(false)"
                         name="spotify-spotify_follower-min-value" [min]="filters.spotify.spotify_follower.options.floor"
                         [max]="filters.spotify.spotify_follower.options.ceil"
                         [ngModel]="filters.spotify.spotify_follower.value.min" class="w-40 w-35 filter-input text-light"></p-inputNumber>
                       <span class="mx-2">to</span>
-                      <p-inputNumber (onInput)="filters.spotify.spotify_follower.value.max = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.spotify_follower.value.max = $event.value; setQueryParams(false)"
                         name="spotify-top_track_streams-min-value" [min]="filters.spotify.spotify_follower.options.floor"
                         [max]="filters.spotify.spotify_follower.options.ceil"
                         [ngModel]="filters.spotify.spotify_follower.value.max" class="w-40 w-35 filter-input text-light"></p-inputNumber>
                     </div>
                   </div>
                   <div class="col-lg-9 col-md-8 col-sm-11 d-flex flex-column justify-content-center" [class.disabled]="!filters.spotify.spotify_follower.enabled">
-                    <ngx-slider *ngIf="filters.spotify.spotify_follower.value.min !== null" (userChangeEnd)="setQueryParams()"
+                    <ngx-slider *ngIf="filters.spotify.spotify_follower.value.min !== null" (userChangeEnd)="setQueryParams(false)"
                                 [(value)]="filters.spotify.spotify_follower.value.min"
                                 [(highValue)]="filters.spotify.spotify_follower.value.max"
-                                (userChange)="onSliderValueChanged($event)"
                                 [options]="filters.spotify.spotify_follower.options"></ngx-slider>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-end mb-2">
-                    <p-inputSwitch (onChange)="setQueryParams()" [(ngModel)]="filters.spotify.spotify_follower.enabled"></p-inputSwitch>
+                    <p-inputSwitch (onChange)="setQueryParams(false)" [(ngModel)]="filters.spotify.spotify_follower.enabled"></p-inputSwitch>
                   </div>
                 </div>
               </div>
@@ -165,25 +164,25 @@
                   <div class="col-lg-2 col-md-3 col-sm-12" [class.disabled]="!filters.spotify.recent_track_streams.enabled">
                     <h6>Streams of latest release</h6>
                     <div>
-                      <p-inputNumber (onInput)="filters.spotify.recent_track_streams.value.min = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.recent_track_streams.value.min = $event.value; setQueryParams(false)"
                         name="spotify-top_track_streams-min-value" [min]="filters.spotify.recent_track_streams.options.floor"
                         [max]="filters.spotify.recent_track_streams.options.ceil"
                         [ngModel]="filters.spotify.recent_track_streams.value.min" class="w-40 w-35 filter-input text-light"></p-inputNumber>
                       <span class="mx-2">to</span>
-                      <p-inputNumber (onInput)="filters.spotify.recent_track_streams.value.max = $event.value; setQueryParams()"
+                      <p-inputNumber (onInput)="filters.spotify.recent_track_streams.value.max = $event.value; setQueryParams(false)"
                         name="spotify-top_track_streams-min-value" [min]="filters.spotify.recent_track_streams.options.floor"
                         [max]="filters.spotify.recent_track_streams.options.ceil"
                         [ngModel]="filters.spotify.recent_track_streams.value.max" class="w-40 w-35 filter-input text-light"></p-inputNumber>
                     </div>
                   </div>
                   <div class="col-lg-9 col-md-8 col-sm-11 d-flex flex-column justify-content-center" [class.disabled]="!filters.spotify.recent_track_streams.enabled">
-                    <ngx-slider *ngIf="filters.spotify.recent_track_streams.value.min !== null" (userChangeEnd)="setQueryParams()"
+                    <ngx-slider *ngIf="filters.spotify.recent_track_streams.value.min !== null" (userChangeEnd)="setQueryParams(false)"
                                 [(value)]="filters.spotify.recent_track_streams.value.min"
                                 [(highValue)]="filters.spotify.recent_track_streams.value.max"
                                 [options]="filters.spotify.recent_track_streams.options"></ngx-slider>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1 d-flex align-items-end mb-2">
-                    <p-inputSwitch (onChange)="setQueryParams()" [(ngModel)]="filters.spotify.recent_track_streams.enabled"></p-inputSwitch>
+                    <p-inputSwitch (onChange)="setQueryParams(false)" [(ngModel)]="filters.spotify.recent_track_streams.enabled"></p-inputSwitch>
                   </div>
                 </div>
               </div>
@@ -196,7 +195,7 @@
               <i class="bi-instagram"></i>
               <span class="filter-name">Instagram</span>
               <span class="count">13</span>
-              <p-inputSwitch (onChange)="setQueryParams()"></p-inputSwitch>
+              <p-inputSwitch (onChange)="setQueryParams(false)"></p-inputSwitch>
             </div>
 
             <div class="caret-up-container" style="display: none">
@@ -210,7 +209,7 @@
               <i class="bi-youtube"></i>
               <span class="filter-name">Youtube</span>
               <span class="count">8</span>
-              <p-inputSwitch (onChange)="setQueryParams()"></p-inputSwitch>
+              <p-inputSwitch (onChange)="setQueryParams(false)"></p-inputSwitch>
             </div>
 
             <div class="caret-up-container" style="display: none">
@@ -227,7 +226,7 @@
               <i class="bi-music-note"></i>
               <span class="filter-name">Genre</span>
               <span class="count">10</span>
-              <p-inputSwitch (onChange)="setQueryParams()" [ngModel]="true"></p-inputSwitch>
+              <p-inputSwitch (onChange)="setQueryParams(false)" [ngModel]="true"></p-inputSwitch>
             </div>
 
             <div class="caret-up-container" style="display: none">
@@ -244,7 +243,7 @@
               <i class="bi-globe"></i>
               <span class="filter-name">Countries</span>
               <span class="count">1</span>
-              <p-inputSwitch (onChange)="setQueryParams()" [ngModel]="true"></p-inputSwitch>
+              <p-inputSwitch (onChange)="setQueryParams(false)" [ngModel]="true"></p-inputSwitch>
             </div>
 
             <div class="caret-up-container" style="display: none">

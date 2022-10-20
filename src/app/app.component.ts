@@ -32,7 +32,7 @@ export class AppComponent implements OnInit{
         options: {
           floor: null,
           ceil: null,
-          step: 32
+          step: 1
         },
         enabled: true
       },
@@ -56,7 +56,8 @@ export class AppComponent implements OnInit{
         },
         options: {
           floor: null,
-          ceil: null
+          ceil: null,
+          step: 1,
         },
         enabled: true
       },
@@ -67,7 +68,8 @@ export class AppComponent implements OnInit{
         },
         options: {
           floor: null,
-          ceil: null
+          ceil: null,
+          step: 1,
         },
         enabled: true
       },
@@ -101,7 +103,7 @@ export class AppComponent implements OnInit{
   @HostListener("window:scroll", []) onScroll(): void {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       this.queryParamsPageNumber += 1;
-      this.setQueryParams();
+      this.setQueryParams(true);
     }
   }
 
@@ -118,11 +120,11 @@ export class AppComponent implements OnInit{
     this.getValueRanges();
   }
 
-  getFilteredArtists(queryParams = null): void {
+  getFilteredArtists(queryParams = null, isLazyLoading = false): void {
     this.showLoader = true;
     this.appService.getFilteredArtists(queryParams).pipe(takeUntil(this.componentInView)).subscribe(response => {
       this.showLoader = false;
-      this.filteredArtists = [...this.filteredArtists, ...response];
+      this.filteredArtists = isLazyLoading ? [...this.filteredArtists, ...response] : response;
     }, error => {
       this.showLoader = false;
       this.toastService.error(error.error.message);
@@ -155,7 +157,7 @@ export class AppComponent implements OnInit{
     }
   }
 
-  setQueryParams(): void {
+  setQueryParams(isLazyLoading): void {
     let queryParams = {};
 
     for(let key in this.filters) {
@@ -171,7 +173,7 @@ export class AppComponent implements OnInit{
       queryParams['page'] = this.queryParamsPageNumber;
     }
 
-    this.getFilteredArtists(queryParams);
+    this.getFilteredArtists(queryParams, isLazyLoading);
   }
 
   getFormat(number){
@@ -200,19 +202,19 @@ export class AppComponent implements OnInit{
     const value = event.value;
 
     if (value === 'SPOTIFY_MONTHLY_LISTENERS') {
-      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_monthly_listeners > +value2.spotify_monthly_listeners ? 1 : -1 );
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_monthly_listeners < +value2.spotify_monthly_listeners ? 1 : -1 );
     }
 
     if (value === 'SPOTIFY_FOLLOWERS') {
-      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_follower > +value2.spotify_follower ? 1 : -1 );
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.spotify_follower < +value2.spotify_follower ? 1 : -1 );
     }
 
     if (value === 'RECENT_TRACK_STREAMS') {
-      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.recent_track_streams > +value2.recent_track_streams ? 1 : -1 );
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.recent_track_streams < +value2.recent_track_streams ? 1 : -1 );
     }
 
     if (value === 'TOP_TRACK_STREAMS') {
-      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.top_track_streams > +value2.top_track_streams ? 1 : -1 );
+      this.filteredArtists = this.filteredArtists.sort((value1, value2) => +value1.top_track_streams < +value2.top_track_streams ? 1 : -1 );
     }
   }
 
@@ -227,19 +229,5 @@ export class AppComponent implements OnInit{
     }
 
     return count;
-  }
-
-  onSliderValueChanged(event): void {
-    this.filters.spotify.spotify_follower.value.power++;
-    if (this.filters.spotify.spotify_follower.value.min === this.filters.spotify.spotify_follower.options.ceil) {
-      this.filters.spotify.spotify_follower.value.min = this.filters.spotify.spotify_follower.value.min / 2;
-    } else  {
-      this.filters.spotify.spotify_follower.value.min = Math.pow(2, this.filters.spotify.spotify_follower.value.power);
-    }
-
-    this.filters.spotify.spotify_follower = {...this.filters.spotify.spotify_follower};
-    this.filters = {...this.filters};
-
-    console.log( this.filters.spotify.spotify_follower);
   }
 }
